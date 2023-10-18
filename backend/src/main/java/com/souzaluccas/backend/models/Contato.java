@@ -7,6 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "TB_CONTATOS")
@@ -14,9 +16,13 @@ public class Contato {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
     private String nome;
+    @NotBlank
     private String email;
+    @NotBlank
     private String telefone;
+    @NotNull
     private LocalDate nascimento;
     public Contato(Long id, String nome, String email, String telefone, LocalDate nascimento) {
         this.id = id;
