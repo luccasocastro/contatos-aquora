@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.souzaluccas.backend.models.Contato;
 import com.souzaluccas.backend.services.ContatoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/contatos")
 public class ContatoController {
@@ -25,7 +27,7 @@ public class ContatoController {
     }
 
     @PostMapping("/criar")
-    public ResponseEntity<Contato> create(@RequestBody Contato obj){
+    public ResponseEntity<Contato> create(@Valid @RequestBody Contato obj){
         Contato contato = contatoService.create(obj);
         return ResponseEntity.status(HttpStatus.CREATED).body(contato);
     }
