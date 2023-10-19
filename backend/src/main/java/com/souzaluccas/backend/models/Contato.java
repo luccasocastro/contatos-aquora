@@ -24,7 +24,9 @@ public class Contato {
     private String telefone;
     @NotNull
     private LocalDate nascimento;
-    public Contato(Long id, String nome, String email, String telefone, LocalDate nascimento) {
+    
+    public Contato(Long id, @NotBlank String nome, @NotBlank String email, @NotBlank String telefone,
+            @NotNull LocalDate nascimento) {
         this.id = id;
         this.nome = nome;
         this.email = email;
