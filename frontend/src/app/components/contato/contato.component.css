@@ -25,6 +25,7 @@ img {
    border: 2px solid grey;
    border-radius: 10px;
    margin: 0 auto;
+   margin-bottom: 1em;
    display: grid;
    grid-template-columns: 10% 20% 40% 20%;
    align-items: center;
@@ -32,11 +33,11 @@ img {
 }
 
 .btnEditar{
-    background-color: rgb(255, 238, 0);
+    background-color: rgb(255, 196, 0);
 }
 
 .btnEditar:hover {
-    background-color: rgb(189, 189, 0);
+    background-color: rgb(233, 178, 0);
 }
 
 .btnExcluir {
