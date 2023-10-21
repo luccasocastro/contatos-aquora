@@ -16,4 +16,8 @@ export class ContatoService {
   getAll(): Observable<Contato[]>{
     return this.http.get<Contato[]>(this.apiUrl)
   }
+
+  createContato(dados: any): Observable<any>{
+    return this.http.post(`${this.apiUrl}/criar`, dados)
+  }
 }

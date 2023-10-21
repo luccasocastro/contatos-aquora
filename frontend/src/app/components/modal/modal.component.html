@@ -1,12 +1,66 @@
-<div class="modal">
-  <h1>Lorem, ipsum dolor.</h1>
-  <p>
-    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Earum dicta non
-    alias distinctio, aliquid aperiam ipsum provident quae nihil voluptatibus
-    veniam fuga similique facilis consequatur reiciendis recusandae. Velit magni
-    distinctio corporis eaque ad itaque ex impedit accusamus. Debitis pariatur
-    cum quam rerum reprehenderit quod iure, in explicabo facere vero nemo?
-  </p>
-  <button (click)="modalService.showModal = false">Fechar</button>
+<div class="modal" *ngIf="formContato">
+  <div class="header">
+    <h1>Novo Contato</h1>
+    <button (click)="modalService.showModal = false">X</button>
+  </div>
+  <form [formGroup]="formContato" (ngSubmit)="submit()">
+    <div class="form-group">
+      <label for="nome">Nome</label>
+      <input
+        type="text"
+        class="form-control"
+        name="nome"
+        id="nome"
+        formControlName="nome"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="email">E-mail</label>
+      <input
+        type="email"
+        class="form-control"
+        name="email"
+        id="email"
+        formControlName="email"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="telefone">Telefone</label>
+      <input
+        type="text"
+        class="form-control"
+        name="telefone"
+        id="telefone"
+        formControlName="telefone"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="nascimento">Data de nascimento</label>
+      <input
+        type="date"
+        class="form-control"
+        name="nascimento"
+        id="nascimento"
+        formControlName="nascimento"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="image">Foto:</label>
+      <input
+        type="file"
+        class="form-control"
+        name="imagemPerfil"
+        id="imagemPerfil"
+        formControlName="imagemPerfil"
+        required
+      />
+    </div>
+    <button (click)="modalService.showModal = false">Cancelar</button>
+    <input type="submit" value="Salvar" (click)="modalService.showModal = false"/>
+  </form>
 </div>
 <div class="overlay"></div>
