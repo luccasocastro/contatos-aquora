@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalService } from 'src/app/services/modal.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContatoService } from 'src/app/services/contato.service';
@@ -14,7 +15,8 @@ export class ModalComponent implements OnInit {
   constructor(
     public modalService: ModalService,
     private formBuilder: FormBuilder,
-    private contatoService: ContatoService
+    private contatoService: ContatoService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -35,6 +37,8 @@ export class ModalComponent implements OnInit {
         (resposta) => {
           console.log('Dados enviados com sucesso!', resposta)
           this.formContato.reset()
+          this.modalService.showModal = false
+          window.location.href = '/';
         },
         (erro) => {
           console.error('Erro ao enviar os dados', erro);
