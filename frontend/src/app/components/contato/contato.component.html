@@ -1,6 +1,6 @@
 <div class="card" *ngFor="let contato of contatos">
   <h1>#{{ contato.id }}</h1>
-  <img class="image" src="{{ contato.imagemPerfil }}" alt="Samuca" />
+  <img class="image" src="{{ contato.imagemPerfil }}" alt="{{ contato.nome }}" />
   <div>
     <p><strong>Nome:</strong>{{ contato.nome }}</p>
     <p><strong>Email:</strong>{{ contato.email }}</p>
