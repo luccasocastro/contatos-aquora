@@ -13,17 +13,30 @@ export class ContatoComponent implements OnInit{
   contatos: Contato[] = []
 
   ngOnInit(): void {
-      this.contatoService.getAll().subscribe((contatos) => {
-        const data = contatos
+    this.carregarContatos()
+  }
 
-        data.map((contato) => {
-          contato.nascimento = new Date(contato.nascimento).toLocaleDateString(
-            'pt-BR'
-          )
-        })
-
-        this.contatos = contatos
+  deletarContato(id: number){
+    if(confirm('Tem certeza que deseja excluir este contato?')){
+      this.contatoService.deletarContato(id).subscribe(() => {
+        console.log('Contato deletado')
+        this.carregarContatos()
       })
+    }
+  }
+
+  carregarContatos(){
+    this.contatoService.getAll().subscribe((contatos) => {
+      const data = contatos
+
+      data.map((contato) => {
+        contato.nascimento = new Date(contato.nascimento).toLocaleDateString(
+          'pt-BR'
+        )
+      })
+
+      this.contatos = contatos
+    })
   }
 
 }

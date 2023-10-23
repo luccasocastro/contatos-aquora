@@ -21,4 +21,8 @@ export class ContatoService {
     const headers = new HttpHeaders();
     return this.http.post(`${this.apiUrl}/criar`, dados, { headers });
   }
+
+  deletarContato(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/deletar/${id}`)
+  }
 }
