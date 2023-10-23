@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,7 +47,8 @@ public class ContatoController {
             @RequestParam("imagemPerfil") MultipartFile imagemPerfil) {
 
         // Salve a imagem de perfil no diretório configurado
-        String imagemPerfilPath = uploadDir + File.separator + imagemPerfil.getOriginalFilename();
+        String originalFileName = imagemPerfil.getOriginalFilename();
+        String imagemPerfilPath = uploadDir + File.separator + originalFileName;
         Path imagePath = Paths.get(imagemPerfilPath);
 
         try {
@@ -55,7 +58,9 @@ public class ContatoController {
             // Lida com erros ao salvar a imagem
         }
 
-        Contato contato = new Contato(null, nome, email, telefone, nascimento, imagemPerfilPath);
+        String imagemPerfilUrl = "http://localhost:8080/contatos/imagens/" + originalFileName;
+
+        Contato contato = new Contato(null, nome, email, telefone, nascimento, imagemPerfilPath, imagemPerfilUrl);
         Contato novoContato = contatoService.create(contato);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(novoContato);
@@ -82,5 +87,21 @@ public class ContatoController {
     public ResponseEntity<Object> delete(@PathVariable Long id) {
         contatoService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/imagens/{fileName:.+}")
+    public ResponseEntity<Resource> downloadImagem(@PathVariable String fileName){
+        try{
+            Path imagePath = Paths.get(uploadDir, fileName);
+            Resource imageResource = new UrlResource(imagePath.toUri());
+
+            if(imageResource.exists() && imageResource.isReadable()){
+                return ResponseEntity.ok().body(imageResource);
+            }else{
+                return ResponseEntity.notFound().build();
+            }
+        }catch(IOException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

@@ -27,6 +27,18 @@ public class Contato {
     private LocalDate nascimento;
     @NotBlank
     private String imagemPerfil;
+    private String imagemPerfilUrl;
+
+    public Contato(Long id, @NotBlank String nome, @NotBlank String email, @NotBlank String telefone,
+            @NotNull LocalDate nascimento, @NotBlank String imagemPerfil, String imagemPerfilUrl) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+        this.nascimento = nascimento;
+        this.imagemPerfil = imagemPerfil;
+        this.imagemPerfilUrl = imagemPerfilUrl;
+    }
 
     public Contato(Long id, @NotBlank String nome, @NotBlank String email, @NotBlank String telefone,
             @NotNull LocalDate nascimento, @NotBlank String imagemPerfil) {
@@ -95,4 +107,11 @@ public class Contato {
         return imagemPerfil;
     }
 
+    public String getImagemPerfilUrl() {
+        return imagemPerfilUrl;
+    }
+
+    public void setImagemPerfilUrl(String imagemPerfilUrl) {
+        this.imagemPerfilUrl = imagemPerfilUrl;
+    }
 }
