@@ -81,18 +81,18 @@ public class Contato {
         this.nascimento = nascimento;
     }
 
-    public String getImagemPerfil() {
-        return imagemPerfil;
+    @Override
+    public String toString() {
+        return "Contato [id=" + id + ", nome=" + nome + ", email=" + email + ", telefone=" + telefone + ", nascimento="
+                + nascimento + ", imagemPerfil=" + imagemPerfil + "]";
     }
 
     public void setImagemPerfil(String imagemPerfil) {
         this.imagemPerfil = imagemPerfil;
     }
 
-    @Override
-    public String toString() {
-        return "Contato [id=" + id + ", nome=" + nome + ", email=" + email + ", telefone=" + telefone + ", nascimento="
-                + nascimento + ", imagemPerfil=" + imagemPerfil + "]";
+    public String getImagemPerfil() {
+        return imagemPerfil;
     }
 
 }

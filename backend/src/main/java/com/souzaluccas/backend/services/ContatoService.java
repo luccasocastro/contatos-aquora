@@ -24,7 +24,6 @@ public class ContatoService {
         } catch (DataIntegrityViolationException e) {
             throw new RuntimeException("Erro ao criar o contato: " + e.getMessage(), e);
         }
-
     }
 
     public List<Contato> list() {
