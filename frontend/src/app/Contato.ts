@@ -5,4 +5,5 @@ export interface Contato {
     telefone: string;
     nascimento: string;
     imagemPerfil: string;
+    imagemPerfilUrl: string;
 }
