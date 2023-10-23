@@ -79,7 +79,7 @@ public class ContatoController {
     }
 
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<Object> delete(@RequestParam Long id) {
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
         contatoService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
