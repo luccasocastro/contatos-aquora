@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Contato } from '../Contato';
 
 @Injectable({
@@ -13,11 +13,12 @@ export class ContatoService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Contato[]>{
-    return this.http.get<Contato[]>(this.apiUrl)
+  getAll(): Observable<Contato[]> {
+    return this.http.get<Contato[]>(this.apiUrl);
   }
 
-  createContato(dados: any): Observable<any>{
-    return this.http.post(`${this.apiUrl}/criar`, dados)
+  criarContato(dados: FormData): Observable<any> {
+    const headers = new HttpHeaders();
+    return this.http.post(`${this.apiUrl}/criar`, dados, { headers });
   }
 }
