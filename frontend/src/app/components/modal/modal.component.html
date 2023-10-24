@@ -1,7 +1,7 @@
 <div class="modal" *ngIf="formContato">
   <div class="header">
     <h1>Novo Contato</h1>
-    <button (click)="modalService.showModal = false">X</button>
+    <button class="button-x" (click)="modalService.showModalPost = false">X</button>
   </div>
   <form
     [formGroup]="formContato"
@@ -9,64 +9,68 @@
     enctype="multipart/form-data"
   >
     <div class="form-group">
-      <label for="nome">Nome</label>
+      <label for="nome">Nome:</label>
       <input
         type="text"
-        class="form-control"
-        name="nome"
-        id="nome"
         formControlName="nome"
+        placeholder="Informe um nome"
         required
       />
+      <div *ngIf="formContato.get('nome')?.invalid && formContato.get('nome')?.touched">
+        <div class="alert alert-danger">Campo "Nome" é obrigatório *</div>
+      </div>
     </div>
     <div class="form-group">
-      <label for="email">E-mail</label>
+      <label for="email">E-mail:</label>
       <input
         type="email"
-        class="form-control"
-        name="email"
-        id="email"
         formControlName="email"
+        placeholder="Informe um e-mail"
         required
       />
+      <div *ngIf="formContato.get('email')?.invalid && formContato.get('email')?.touched">
+        <div class="alert alert-danger">Campo "E-mail" é obrigatório *</div>
+      </div>
     </div>
     <div class="form-group">
-      <label for="telefone">Telefone</label>
+      <label for="telefone">Telefone:</label>
       <input
         type="text"
-        class="form-control"
-        name="telefone"
-        id="telefone"
         formControlName="telefone"
+        placeholder="Informe um telefone"
         required
       />
+      <div *ngIf="formContato.get('telefone')?.invalid && formContato.get('telefone')?.touched">
+        <div class="alert alert-danger">Campo "Telefone" é obrigatório *</div>
+      </div>
     </div>
     <div class="form-group">
-      <label for="nascimento">Data de nascimento</label>
+      <label for="nascimento">Data de nascimento:</label>
       <input
         type="date"
-        class="form-control"
-        name="nascimento"
-        id="nascimento"
         formControlName="nascimento"
+        placeholder="Informe uma data de nascimento"
         required
       />
+      <div *ngIf="formContato.get('nascimento')?.invalid && formContato.get('nascimento')?.touched">
+        <div class="alert alert-danger">Campo "Data de Nascimento" é obrigatório *</div>
+      </div>
     </div>
     <div class="form-group">
-      <label for="imagemPerfil">Foto:</label>
+      <label for="imagemPerfil">Adicione uma foto de perfil:</label>
       <input
         type="file"
         accept="image/*"
-        class="form-control"
-        name="imagemPerfil"
-        id="imagemPerfil"
         formControlName="imagemPerfil"
         (change)="onFileSelected($event)"
         required
       />
+      <div *ngIf="formContato.get('imagemPerfil')?.invalid && formContato.get('imagemPerfil')?.touched">
+        <div class="alert alert-danger">Campo "Imagem de Perfil" é obrigatório *</div>
+      </div>
     </div>
-    <button (click)="modalService.showModal = false">Cancelar</button>
-    <input type="submit" value="Salvar" />
+    <button class="cancel-button" (click)="modalService.showModalPost = false">Cancelar</button>
+    <input class="submit-button" type="submit" value="Salvar" [disabled]="formContato.invalid"/>
   </form>
 </div>
 <div class="overlay"></div>
