@@ -5,7 +5,18 @@ import { Injectable } from '@angular/core';
 })
 export class ModalService {
 
-  public showModal: boolean = false
+  public showModalPost: boolean = false
+  public showModalPut: boolean = false
+
+  private contatoId!: number;
+
+  setContatoId(id: number){
+    this.contatoId = id
+  }
+
+  getContatoId(){
+    return this.contatoId
+  }
 
   constructor() { }
 }

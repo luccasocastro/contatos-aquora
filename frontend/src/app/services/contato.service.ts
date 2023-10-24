@@ -25,4 +25,13 @@ export class ContatoService {
   deletarContato(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/deletar/${id}`)
   }
+
+  buscarContato(id: number): Observable<Contato>{
+    return this.http.get<Contato>(`${this.apiUrl}/${id}`)
+  }
+
+  atualizarContato(id: number, dados: FormData): Observable<any>{
+    const headers = new HttpHeaders()
+    return this.http.put(`${this.apiUrl}/atualizar/${id}`, dados, { headers })
+  }
 }
