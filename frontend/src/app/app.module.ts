@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { ContatoComponent } from './components/contato/contato.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { ModalEdicaoComponent } from './components/modal-edicao/modal-edicao.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { ModalComponent } from './components/modal/modal.component';
     ContatoComponent,
     HeaderComponent,
     ModalComponent,
+    ModalEdicaoComponent,
   ],
   imports: [
     BrowserModule,
