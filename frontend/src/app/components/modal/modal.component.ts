@@ -10,7 +10,8 @@ import { ContatoService } from 'src/app/services/contato.service';
 })
 export class ModalComponent implements OnInit {
   formContato!: FormGroup;
-  image?: File
+  image?: File;
+
 
   constructor(
     public modalService: ModalService,
@@ -35,26 +36,30 @@ export class ModalComponent implements OnInit {
   }
 
   submit() {
-    if(this.formContato.valid){
-      const formData = new FormData()
+    if (this.formContato.valid) {
+      const formData = new FormData();
 
-      formData.append('nome', this.formContato.get('nome')!.value)
-      formData.append('email', this.formContato.get('email')!.value)
-      formData.append('telefone', this.formContato.get('telefone')!.value)
-      formData.append('nascimento', this.formContato.get('nascimento')!.value)
-      formData.append('imagemPerfil', this.formContato.get('imagemPerfil')!.value)
+      formData.append('nome', this.formContato.get('nome')!.value);
+      formData.append('email', this.formContato.get('email')!.value);
+      formData.append('telefone', this.formContato.get('telefone')!.value);
+      formData.append('nascimento', this.formContato.get('nascimento')!.value);
+      formData.append(
+        'imagemPerfil',
+        this.formContato.get('imagemPerfil')!.value
+      );
 
       this.contatoService.criarContato(formData).subscribe(
         (response) => {
-          console.log('Contato criado com sucesso!', response)
-          this.formContato.reset()
-          this.modalService.showModal = false
+          console.log('Contato criado com sucesso!', response);
+          this.formContato.reset();
+          this.modalService.showModalPost = false;
+          alert('Contato criado com sucesso!');
           window.location.href = '/';
         },
         (error) => {
-          console.log('Erro ao criar contato!', error)
+          console.log('Erro ao criar contato!', error);
         }
-      )
+      );
     }
   }
 }
