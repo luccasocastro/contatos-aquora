@@ -8,7 +8,8 @@
     <p class="date"><strong>Data de nascimento:</strong>{{ contato.nascimento }}</p>
   </div>
   <div>
-    <button class="btnEditar">Editar</button>
+    <button class="btnEditar" (click)="editarContato(contato)">Editar</button>
     <button class="btnExcluir" (click)="deletarContato(contato.id)">Excluir</button>
   </div>
 </div>
+<app-modal-edicao *ngIf="modalService.showModalPut"></app-modal-edicao>

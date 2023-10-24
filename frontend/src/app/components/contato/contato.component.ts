@@ -1,6 +1,7 @@
 import { Contato } from 'src/app/Contato';
 import { ContatoService } from './../../services/contato.service';
 import { Component, OnInit } from '@angular/core';
+import { ModalService } from 'src/app/services/modal.service';
 
 @Component({
   selector: 'app-contato',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./contato.component.css'],
 })
 export class ContatoComponent implements OnInit{
-  constructor(private contatoService: ContatoService) {}
+  constructor(private contatoService: ContatoService, public modalService: ModalService) {}
 
   contatos: Contato[] = []
 
@@ -20,6 +21,7 @@ export class ContatoComponent implements OnInit{
     if(confirm('Tem certeza que deseja excluir este contato?')){
       this.contatoService.deletarContato(id).subscribe(() => {
         console.log('Contato deletado')
+        alert('Contato excluído com sucesso!')
         this.carregarContatos()
       })
     }
@@ -37,6 +39,11 @@ export class ContatoComponent implements OnInit{
 
       this.contatos = contatos
     })
+  }
+
+  editarContato(contato: Contato){
+    this.modalService.setContatoId(contato.id)
+    this.modalService.showModalPut = true
   }
 
 }
