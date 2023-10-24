@@ -1,0 +1,63 @@
+<div class="modal" *ngIf="formContato">
+    <div class="header">
+      <h1>Editar Contato</h1>
+      <button class="button-x" (click)="modalService.showModalPut = false">X</button>
+    </div>
+    <form
+      [formGroup]="formContato"
+      (ngSubmit)="submit()"
+      enctype="multipart/form-data"
+    >
+      <div class="form-group">
+        <label for="nome">Novo nome:</label>
+        <input
+          type="text"
+          formControlName="nome"
+          [(ngModel)]="contatoParaEdicao.nome"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="email">Novo e-mail:</label>
+        <input
+          type="email"
+          formControlName="email"
+          [(ngModel)]="contatoParaEdicao.email"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="telefone">Novo telefone:</label>
+        <input
+          type="text"
+          formControlName="telefone"
+          [(ngModel)]="contatoParaEdicao.telefone"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="nascimento">Nova data de nascimento:</label>
+        <input
+          type="date"
+          formControlName="nascimento"
+          [(ngModel)]="contatoParaEdicao.nascimento"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="imagemPerfil">Adicione uma foto de perfil:</label>
+        <input
+          type="file"
+          accept="image/*"
+          formControlName="imagemPerfil"
+          [(ngModel)]="contatoParaEdicao.imagemPerfil"
+          (change)="onFileSelected($event)"
+          required
+        />
+      </div>
+      <button class="cancel-button" (click)="modalService.showModalPut = false">Cancelar</button>
+      <input class="submit-button" type="submit" value="Salvar" [disabled]="formContato.invalid"/>
+    </form>
+  </div>
+  <div class="overlay"></div>
+  
