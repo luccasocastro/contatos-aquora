@@ -29,17 +29,20 @@ export class ModalEdicaoComponent implements OnInit {
       nascimento: ['', Validators.required],
       imagemPerfil: ['', Validators.required],
     });
-
-    const contatoId = this.modalService.getContatoId();
-    this.contatoService.buscarContato(contatoId).subscribe((data) => {
-      this.contatoParaEdicao = data;
-    });
+    this.carregarContato()
   }
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
 
     this.formContato.patchValue({ imagemPerfil: event.target.files[0] });
+  }
+
+  carregarContato(){
+    const contatoId = this.modalService.getContatoId();
+    this.contatoService.buscarContato(contatoId).subscribe((data) => {
+      this.contatoParaEdicao = data;
+    });
   }
 
   submit() {
