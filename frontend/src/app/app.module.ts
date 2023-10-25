@@ -9,6 +9,7 @@ import { ContatoComponent } from './components/contato/contato.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { ModalEdicaoComponent } from './components/modal-edicao/modal-edicao.component';
+import { InputMaskModule } from '@ngneat/input-mask';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ModalEdicaoComponent } from './components/modal-edicao/modal-edicao.com
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    InputMaskModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
