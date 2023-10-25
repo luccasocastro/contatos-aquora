@@ -17,9 +17,9 @@ export class ContatoService {
     return this.http.get<Contato[]>(this.apiUrl);
   }
 
-  criarContato(dados: FormData): Observable<any> {
+  criarContato(dados: FormData): Observable<FormData> {
     const headers = new HttpHeaders();
-    return this.http.post(`${this.apiUrl}/criar`, dados, { headers });
+    return this.http.post<FormData>(`${this.apiUrl}/criar`, dados, { headers });
   }
 
   deletarContato(id: number): Observable<void> {
@@ -30,8 +30,8 @@ export class ContatoService {
     return this.http.get<Contato>(`${this.apiUrl}/${id}`)
   }
 
-  atualizarContato(id: number, dados: FormData): Observable<any>{
+  atualizarContato(id: number, dados: FormData): Observable<FormData>{
     const headers = new HttpHeaders()
-    return this.http.put(`${this.apiUrl}/atualizar/${id}`, dados, { headers })
+    return this.http.put<FormData>(`${this.apiUrl}/atualizar/${id}`, dados, { headers })
   }
 }
