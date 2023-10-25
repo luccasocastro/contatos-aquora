@@ -17,7 +17,7 @@
         required
       />
       <div *ngIf="formContato.get('nome')?.invalid && formContato.get('nome')?.touched">
-        <div class="alert alert-danger">Campo "Nome" é obrigatório *</div>
+        <div class="alert-danger">Campo "Nome" é obrigatório *</div>
       </div>
     </div>
     <div class="form-group">
@@ -29,7 +29,7 @@
         required
       />
       <div *ngIf="formContato.get('email')?.invalid && formContato.get('email')?.touched">
-        <div class="alert alert-danger">Campo "E-mail" é obrigatório *</div>
+        <div class="alert-danger">Campo "E-mail" é obrigatório *</div>
       </div>
     </div>
     <div class="form-group">
@@ -38,10 +38,11 @@
         type="text"
         formControlName="telefone"
         placeholder="Informe um telefone"
+        [inputMask]="modalService.maskTelefone"
         required
       />
       <div *ngIf="formContato.get('telefone')?.invalid && formContato.get('telefone')?.touched">
-        <div class="alert alert-danger">Campo "Telefone" é obrigatório *</div>
+        <div class="alert-danger">Campo "Telefone" é obrigatório *</div>
       </div>
     </div>
     <div class="form-group">
@@ -53,7 +54,7 @@
         required
       />
       <div *ngIf="formContato.get('nascimento')?.invalid && formContato.get('nascimento')?.touched">
-        <div class="alert alert-danger">Campo "Data de Nascimento" é obrigatório *</div>
+        <div class="alert-danger">Campo "Data de Nascimento" é obrigatório *</div>
       </div>
     </div>
     <div class="form-group">
@@ -66,7 +67,7 @@
         required
       />
       <div *ngIf="formContato.get('imagemPerfil')?.invalid && formContato.get('imagemPerfil')?.touched">
-        <div class="alert alert-danger">Campo "Imagem de Perfil" é obrigatório *</div>
+        <div class="alert-danger">Campo "Imagem de Perfil" é obrigatório *</div>
       </div>
     </div>
     <button class="cancel-button" (click)="modalService.showModalPost = false">Cancelar</button>
