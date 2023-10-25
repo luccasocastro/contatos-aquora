@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,7 +45,6 @@ public class ContatoController {
             @RequestParam("telefone") String telefone, @RequestParam("nascimento") LocalDate nascimento,
             @RequestParam("imagemPerfil") MultipartFile imagemPerfil) {
 
-        // Salve a imagem de perfil no diretório configurado
         String originalFileName = imagemPerfil.getOriginalFilename();
         String imagemPerfilPath = uploadDir + File.separator + originalFileName;
         Path imagePath = Paths.get(imagemPerfilPath);
@@ -55,7 +53,6 @@ public class ContatoController {
             Files.write(imagePath, imagemPerfil.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
-            // Lida com erros ao salvar a imagem
         }
 
         String imagemPerfilUrl = "http://localhost:8080/contatos/imagens/" + originalFileName;
@@ -78,8 +75,24 @@ public class ContatoController {
     }
 
     @PutMapping("/atualizar/{id}")
-    public ResponseEntity<Contato> update(@RequestBody Contato obj, @RequestParam Long id) {
-        Contato contatoAtualizado = contatoService.update(obj, id);
+    public ResponseEntity<Contato> update(@Valid @RequestParam("nome") String nome, @RequestParam("email") String email,
+            @RequestParam("telefone") String telefone, @RequestParam("nascimento") LocalDate nascimento,
+            @RequestParam("imagemPerfil") MultipartFile imagemPerfil, @PathVariable Long id) {
+
+        String originalFileName = imagemPerfil.getOriginalFilename();
+        String imagemPerfilPath = uploadDir + File.separator + originalFileName;
+        Path imagePath = Paths.get(imagemPerfilPath);
+
+        try {
+            Files.write(imagePath, imagemPerfil.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String imagemPerfilUrl = "http://localhost:8080/contatos/imagens/" + originalFileName;
+
+        Contato contato = new Contato(null, nome, email, telefone, nascimento, imagemPerfilPath, imagemPerfilUrl);
+        Contato contatoAtualizado = contatoService.update(contato, id);
         return ResponseEntity.status(HttpStatus.OK).body(contatoAtualizado);
     }
 
@@ -90,17 +103,17 @@ public class ContatoController {
     }
 
     @GetMapping("/imagens/{fileName:.+}")
-    public ResponseEntity<Resource> downloadImagem(@PathVariable String fileName){
-        try{
+    public ResponseEntity<Resource> downloadImagem(@PathVariable String fileName) {
+        try {
             Path imagePath = Paths.get(uploadDir, fileName);
             Resource imageResource = new UrlResource(imagePath.toUri());
 
-            if(imageResource.exists() && imageResource.isReadable()){
+            if (imageResource.exists() && imageResource.isReadable()) {
                 return ResponseEntity.ok().body(imageResource);
-            }else{
+            } else {
                 return ResponseEntity.notFound().build();
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
