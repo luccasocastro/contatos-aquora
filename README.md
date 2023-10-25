@@ -4,7 +4,7 @@
  <a href="#tech">Tecnologias</a> • 
  <a href="#started">Getting Started</a> • 
   <a href="#routes">Rotas</a> •
- <a href="#colab">Colaboradores</a> •
+ <a href="#colab">Colaboradores</a>
 </p>
 
 <p align="center">
