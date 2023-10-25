@@ -27,9 +27,9 @@ export class ModalEdicaoComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', Validators.required],
       nascimento: ['', Validators.required],
-      imagemPerfil: ['', Validators.required],
+      imagemPerfil: [null, Validators.required],
     });
-    this.carregarContato()
+    this.carregarContato();
   }
 
   onFileSelected(event: any) {
@@ -38,7 +38,7 @@ export class ModalEdicaoComponent implements OnInit {
     this.formContato.patchValue({ imagemPerfil: event.target.files[0] });
   }
 
-  carregarContato(){
+  carregarContato() {
     const contatoId = this.modalService.getContatoId();
     this.contatoService.buscarContato(contatoId).subscribe((data) => {
       this.contatoParaEdicao = data;
@@ -46,8 +46,9 @@ export class ModalEdicaoComponent implements OnInit {
   }
 
   submit() {
+    const formData = new FormData();
     if (this.formContato.valid) {
-      const formData = new FormData();
+      formData.append('id', this.contatoParaEdicao.id.toString());
       formData.append('nome', this.formContato.get('nome')?.value);
       formData.append('email', this.formContato.get('email')?.value);
       formData.append('telefone', this.formContato.get('telefone')?.value);
@@ -62,20 +63,19 @@ export class ModalEdicaoComponent implements OnInit {
         'imagemPerfil',
         this.formContato.get('imagemPerfil')?.value
       );
-
-      this.contatoService
-        .atualizarContato(this.contatoParaEdicao.id, formData)
-        .subscribe(
-          (response) => {
-            console.log('Contato atualizado com sucesso!', response);
-            this.formContato.reset();
-            this.modalService.showModalPut = false;
-            window.location.href = '/';
-          },
-          (error) => {
-            console.log('Erro ao atualizar o contato contato!', error);
-          }
-        );
     }
+
+    this.contatoService
+      .atualizarContato(this.contatoParaEdicao.id, formData)
+      .subscribe(
+        (response) => {
+          console.log('Contato atualizado com sucesso!', response);
+          this.modalService.showModalPut = false;
+          window.location.href = '/';
+        },
+        (error) => {
+          console.log('Erro ao atualizar o contato contato!', error);
+        }
+      );
   }
 }
