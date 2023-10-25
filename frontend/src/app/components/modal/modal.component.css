@@ -60,3 +60,9 @@
 .button-x:hover{
   background-color: #cacaca;
 }
+
+.alert-danger {
+  color: red;
+  border-left: 3px solid #dc3545;
+  padding-left: 0.2em;
+}
