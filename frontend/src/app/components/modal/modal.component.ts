@@ -12,7 +12,6 @@ export class ModalComponent implements OnInit {
   formContato!: FormGroup;
   image?: File;
 
-
   constructor(
     public modalService: ModalService,
     private formBuilder: FormBuilder,
