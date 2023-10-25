@@ -25,6 +25,7 @@
 
 ### Frontend
 - Typescript
+- HTML5 & CSS3
 - Angular 16
 - Reactive Forms
 - Ngneat/Input-Mask
