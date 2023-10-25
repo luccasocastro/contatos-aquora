@@ -37,7 +37,7 @@ export class ContatoComponent implements OnInit{
         )
       })
 
-      this.contatos = contatos
+      this.contatos = contatos.sort((a, b) => a.nome.localeCompare(b.nome))
     })
   }
 
