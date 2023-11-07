@@ -6,11 +6,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
+import com.souzaluccas.backend.models.ContatoResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,6 +32,7 @@ import com.souzaluccas.backend.models.Contato;
 import com.souzaluccas.backend.services.ContatoService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/contatos")
@@ -41,80 +47,76 @@ public class ContatoController {
     }
 
     @PostMapping("/criar")
-    public ResponseEntity<Contato> create(@Valid @RequestParam("nome") String nome, @RequestParam("email") String email,
-            @RequestParam("telefone") String telefone, @RequestParam("nascimento") LocalDate nascimento,
-            @RequestParam("imagemPerfil") MultipartFile imagemPerfil) {
+    public ResponseEntity<Contato> create(@Valid @RequestParam("nome") String nome, @RequestParam("email") String email, @RequestParam("telefone") String telefone, @RequestParam("nascimento") LocalDate nascimento, @RequestParam("imagemPerfil") MultipartFile imagemPerfil) {
+        try{
+            String extensao = imagemPerfil.getOriginalFilename().substring(imagemPerfil.getOriginalFilename().lastIndexOf("."));
+            String nomeArquivo = UUID.randomUUID().toString() + extensao;
+            Path path = Paths.get(uploadDir + nomeArquivo);
+            Files.write(path, imagemPerfil.getBytes());
 
-        String originalFileName = imagemPerfil.getOriginalFilename();
-        String imagemPerfilPath = uploadDir + File.separator + originalFileName;
-        Path imagePath = Paths.get(imagemPerfilPath);
-
-        try {
-            Files.write(imagePath, imagemPerfil.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
+            Contato contato = new Contato(null, nome, email, telefone, nascimento, nomeArquivo);
+            return new ResponseEntity<>(contatoService.create(contato), HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        String imagemPerfilUrl = "http://localhost:8080/contatos/imagens/" + originalFileName;
-
-        Contato contato = new Contato(null, nome, email, telefone, nascimento, imagemPerfilPath, imagemPerfilUrl);
-        Contato novoContato = contatoService.create(contato);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoContato);
     }
 
     @GetMapping
-    public ResponseEntity<List<Contato>> list() {
-        return ResponseEntity.status(HttpStatus.OK).body(contatoService.list());
+    public ResponseEntity<List<ContatoResponse>> list() {
+        try{
+            List<Contato> contatos = new ArrayList<Contato>(contatoService.list());
+
+            if(contatos.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+            List<ContatoResponse> contatosResponse = contatos.stream().map(contato -> {
+                String imagemPerfilUrl = ServletUriComponentsBuilder.fromCurrentContextPath().path("/contatos/imagens/").path(contato.getImagemPerfil()).toUriString();
+
+                return new ContatoResponse(contato.getId(), contato.getNome(), contato.getEmail(), contato.getTelefone(), contato.getNascimento(), imagemPerfilUrl);
+            }).collect(Collectors.toList());
+
+            return new ResponseEntity<>(contatosResponse, HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Contato> findById(@PathVariable Long id) {
         Contato contato = contatoService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(contato);
+        return new ResponseEntity<>(contato, HttpStatus.OK);
     }
 
     @PutMapping("/atualizar/{id}")
-    public ResponseEntity<Contato> update(@Valid @RequestParam("nome") String nome, @RequestParam("email") String email,
-            @RequestParam("telefone") String telefone, @RequestParam("nascimento") LocalDate nascimento,
-            @RequestParam("imagemPerfil") MultipartFile imagemPerfil, @PathVariable Long id) {
+    public ResponseEntity<Contato> update(@Valid @RequestParam("nome") String nome, @RequestParam("email") String email, @RequestParam("telefone") String telefone, @RequestParam("nascimento") LocalDate nascimento, @RequestParam("imagemPerfil") MultipartFile imagemPerfil, @PathVariable Long id){
+        Contato obj = new Contato(null, nome, email, telefone, nascimento, imagemPerfil.getName());
+        try{
+            Contato novoContato = contatoService.update(obj, id, imagemPerfil);
 
-        String originalFileName = imagemPerfil.getOriginalFilename();
-        String imagemPerfilPath = uploadDir + File.separator + originalFileName;
-        Path imagePath = Paths.get(imagemPerfilPath);
-
-        try {
-            Files.write(imagePath, imagemPerfil.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
+            return new ResponseEntity<>(novoContato, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        String imagemPerfilUrl = "http://localhost:8080/contatos/imagens/" + originalFileName;
-
-        Contato contato = new Contato(null, nome, email, telefone, nascimento, imagemPerfilPath, imagemPerfilUrl);
-        Contato contatoAtualizado = contatoService.update(contato, id);
-        return ResponseEntity.status(HttpStatus.OK).body(contatoAtualizado);
     }
 
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<Object> delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         contatoService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/imagens/{fileName:.+}")
     public ResponseEntity<Resource> downloadImagem(@PathVariable String fileName) {
-        try {
-            Path imagePath = Paths.get(uploadDir, fileName);
-            Resource imageResource = new UrlResource(imagePath.toUri());
+        try{
+            Path path = Paths.get(uploadDir + fileName);
+            Resource resource = new UrlResource(path.toUri());
 
-            if (imageResource.exists() && imageResource.isReadable()) {
-                return ResponseEntity.ok().body(imageResource);
-            } else {
-                return ResponseEntity.notFound().build();
+            if(resource.exists() || resource.isReadable()){
+                return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"").body(resource);
+            }else{
+                throw new RuntimeException("Não foi possível ler o arquivo: " + fileName);
             }
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
